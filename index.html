@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Code Volcan</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    .circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: inline-block;
+      margin: 20px;
+      cursor: pointer;
+    }
+    .gris {
+      background-color: #888;
+    }
+    .rouge {
+      background-color: #d00;
+    }
+    #sequence {
+      margin-top: 30px;
+      font-size: 18px;
+    }
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Entre le code volcanique</h1>
+  <div class="circle gris" onclick="ajouter('gris')"></div>
+  <div class="circle rouge" onclick="ajouter('rouge')"></div>
+
+  <div id="sequence"></div>
+  <div id="message"></div>
+  <button onclick="valider()">Valider</button>
+  <button onclick="reset()">Réinitialiser</button>
+
+  <script>
+    const bonneSequence = ['gris', 'gris', 'gris', 'gris', 'rouge', 'rouge', 'rouge', 'gris', 'rouge'];
+    let entree = [];
+
+    function ajouter(couleur) {
+      entree.push(couleur);
+      document.getElementById('sequence').textContent = entree.join(' - ');
+    }
+
+    function valider() {
+      const message = document.getElementById('message');
+      if (JSON.stringify(entree) === JSON.stringify(bonneSequence)) {
+        message.textContent = 'Bravo, code correct !';
+        message.style.color = 'green';
+      } else {
+        message.textContent = 'Code incorrect, recommence !';
+        message.style.color = 'red';
+      }
+    }
+
+    function reset() {
+      entree = [];
+      document.getElementById('sequence').textContent = '';
+      document.getElementById('message').textContent = '';
+    }
+  </script>
+</body>
+</html>
