@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quizz Final Volcan</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 30px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #d35400;
+    }
+    .intro {
+      font-style: italic;
+      color: green;
+      margin-bottom: 30px;
+    }
+    .question {
+      font-size: 1.2em;
+      margin: 20px 0;
+    }
+    .choices button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #f0f0f0;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    .choices button:hover {
+      background-color: #ffeaa7;
+      border-color: #fdcb6e;
+    }
+    #feedback {
+      margin-top: 20px;
+      font-weight: bold;
+      color: red;
+    }
+    #inputZone {
+      margin-top: 20px;
+    }
+    #inputZone input {
+      padding: 8px;
+      margin: 5px;
+      font-size: 1em;
+    }
+    video {
+      margin-top: 30px;
+      border: 2px solid #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quizz Final Volcan</h1>
+  <div id="quiz"></div>
+  <div id="feedback"></div>
+
+  <script>
+    const questions = [
+      {
+        text: "1. Qu'est-ce qu'une éruption effusive ?",
+        choices: [
+          "Une éruption qui libère uniquement des gaz.",
+          "Une éruption où la lave s’écoule sur les pentes du volcan.",
+          "Une éruption avec des nuées ardentes."
+        ],
+        answer: 1
+      },
+      {
+        text: "2. Quelle forme a un volcan ?",
+        choices: [
+          "Un volcan a une forme de cône.",
+          "Une forme irrégulière avec un cratère en spirale.",
+          "Un volcan a une forme de pyramide."
+        ],
+        answer: 0
+      },
+      {
+        text: "3. Comment se forme un volcan ?",
+        choices: [
+          "Par la rencontre des plaques continentales.",
+          "Par l’accumulation de sable et de terre transportés par le vent.",
+          "Par la remontée du magma à travers une fissure de la croûte terrestre."
+        ],
+        answer: 2
+      },
+      {
+        text: "4. Qu'est-ce qu'une éruption explosive ?",
+        choices: [
+          "Une éruption qui ne provoque aucun danger.",
+          "Une éruption où la lave s’écoule sur les pentes du volcan.",
+          "Une éruption violente, avec des projections de cendres, de gaz et de roches."
+        ],
+        answer: 2
+      },
+      {
+        text: "5. Qu’est-ce que le magma ?",
+        choices: [
+          "De la roche en fusion située sous la surface de la Terre.",
+          "Du gaz brûlant libéré pendant une éruption.",
+          "De la roche en fusion à la surface de la Terre."
+        ],
+        answer: 0
+      },
+      {
+        text: "6. Qu’est-ce qu’une chambre magmatique ?",
+        choices: [
+          "Une grotte où les scientifiques observent les volcans.",
+          "Un réservoir souterrain où le magma s’accumule avant l’éruption.",
+          "Une salle pleine de gaz sous la montagne."
+        ],
+        answer: 1
+      },
+      {
+        text: "7. Quels types de volcans sont les plus dangereux ?",
+        choices: [
+          "Les volcans rouges, car leur lave est très chaude.",
+          "Les volcans sous-marins, car on ne les voit pas.",
+          "Les volcans gris, car leurs éruptions sont soudaines et violentes."
+        ],
+        answer: 2
+      },
+      {
+        text: "8. Pourquoi les volcans rouges et gris n’ont-ils pas la même forme ?",
+        choices: [
+          "Parce que les volcans gris sont plus anciens.",
+          "Parce que les volcans rouges se forment sous l’eau.",
+          "Parce que leur magma n'est pas le même."
+        ],
+        answer: 2
+      },
+      {
+        text: "9. Qu’est-ce que la lave ?",
+        choices: [
+          "Une matière noire et froide présente dans les volcans éteints.",
+          "Du magma qui est sorti à la surface du volcan.",
+          "De l’eau chauffée à plus de 1000 °C."
+        ],
+        answer: 1
+      },
+      {
+        text: "10. Entre le numéro de la carte et les coordonnées du volcan :",
+        isInput: true,
+        expected: ["1", "24", "Z"]
+      }
+    ];
+
+    let current = 0;
+
+    function showQuestion() {
+      const container = document.getElementById("quiz");
+      container.innerHTML = "";
+      document.getElementById("feedback").textContent = "";
+      const q = questions[current];
+
+      const qText = document.createElement("div");
+      qText.className = "question";
+      qText.textContent = q.text;
+      container.appendChild(qText);
+
+      if (q.isInput) {
+        const inputZone = document.createElement("div");
+        inputZone.id = "inputZone";
+        inputZone.innerHTML = `
+          <input id="input1" placeholder="Numéro de la carte">
+          <input id="input2" placeholder="Nombre">
+          <input id="input3" placeholder="Lettre">
+          <br>
+          <button onclick="checkInput()">Valider</button>
+        `;
+        container.appendChild(inputZone);
+      } else {
+        const choicesDiv = document.createElement("div");
+        choicesDiv.className = "choices";
+        q.choices.forEach((choice, index) => {
+          const btn = document.createElement("button");
+          btn.textContent = choice;
+          btn.onclick = () => checkAnswer(index);
+          choicesDiv.appendChild(btn);
+        });
+        container.appendChild(choicesDiv);
+      }
+    }
+
+    function checkAnswer(choice) {
+      if (choice === questions[current].answer) {
+        current++;
+        showQuestion();
+      } else {
+        document.getElementById("feedback").textContent = "Essaie encore.";
+      }
+    }
+
+    function checkInput() {
+      const val1 = document.getElementById("input1").value.trim();
+      const val2 = document.getElementById("input2").value.trim();
+      const val3 = document.getElementById("input3").value.trim().toUpperCase();
+      const [exp1, exp2, exp3] = questions[current].expected;
+
+      if (val1 === exp1 && val2 === exp2 && val3 === exp3) {
+        const container = document.getElementById("quiz");
+        container.innerHTML = "<h2>Bravo, vous pouvez rejoindre mon équipe !</h2><br>";
+        const video = document.createElement("video");
+        video.setAttribute("width", "560");
+        video.setAttribute("height", "315");
+        video.setAttribute("controls", "true");
+        const source = document.createElement("source");
+        source.setAttribute("src", "Vidéo finale EG.mp4");
+        source.setAttribute("type", "video/mp4");
+        video.appendChild(source);
+        container.appendChild(video);
+      } else {
+        document.getElementById("feedback").textContent = "Coordonnées incorrectes. Réessaie.";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", showQuestion);
+  </script>
+</body>
+</html>
