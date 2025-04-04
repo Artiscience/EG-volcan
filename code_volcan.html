@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Janine</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    .circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: inline-block;
+      margin: 15px;
+      cursor: pointer;
+    }
+    .gris {
+      background-color: #888;
+    }
+    .rouge {
+      background-color: #d00;
+    }
+    #sequence {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pastille {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    @media (max-width: 600px) {
+      .circle {
+        width: 60px;
+        height: 60px;
+        margin: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Entre le code volcanique</h1>
+  <div class="circle gris" onclick="ajouter('gris')"></div>
+  <div class="circle rouge" onclick="ajouter('rouge')"></div>
+
+  <div id="sequence"></div>
+  <div id="message"></div>
+  <button onclick="valider()">Valider</button>
+  <button onclick="reset()">Réinitialiser</button>
+
+  <script>
+    const bonneSequence = ['gris', 'gris', 'gris', 'gris', 'rouge', 'rouge', 'rouge', 'gris', 'rouge'];
+    let entree = [];
+
+    function ajouter(couleur) {
+      entree.push(couleur);
+      afficherSequence();
+    }
+
+    function afficherSequence() {
+      const sequenceDiv = document.getElementById('sequence');
+      sequenceDiv.innerHTML = '';
+      entree.forEach(couleur => {
+        const pastille = document.createElement('div');
+        pastille.className = 'pastille ' + couleur;
+        sequenceDiv.appendChild(pastille);
+      });
+    }
+
+    function valider() {
+      const message = document.getElementById('message');
+      if (JSON.stringify(entree) === JSON.stringify(bonneSequence)) {
+        message.textContent = 'Félicitations vous avez terminé le journal de bord !';
+        message.style.color = 'green';
+      } else {
+        message.textContent = 'Code incorrect, recommence !';
+        message.style.color = 'red';
+      }
+    }
+
+    function reset() {
+      entree = [];
+      afficherSequence();
+      document.getElementById('message').textContent = '';
+    }
+  </script>
+</body>
+</html>
