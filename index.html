@@ -3,19 +3,21 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Code Volcan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Janine</title>
   <style>
     body {
       font-family: sans-serif;
       text-align: center;
-      padding: 50px;
+      padding: 20px;
+      margin: 0;
     }
     .circle {
-      width: 100px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       display: inline-block;
-      margin: 20px;
+      margin: 15px;
       cursor: pointer;
     }
     .gris {
@@ -26,16 +28,33 @@
     }
     #sequence {
       margin-top: 30px;
-      font-size: 18px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pastille {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-block;
     }
     #message {
       margin-top: 20px;
       font-weight: bold;
+      font-size: 18px;
     }
     button {
       margin-top: 20px;
       padding: 10px 20px;
       font-size: 16px;
+    }
+    @media (max-width: 600px) {
+      .circle {
+        width: 60px;
+        height: 60px;
+        margin: 10px;
+      }
     }
   </style>
 </head>
@@ -55,13 +74,23 @@
 
     function ajouter(couleur) {
       entree.push(couleur);
-      document.getElementById('sequence').textContent = entree.join(' - ');
+      afficherSequence();
+    }
+
+    function afficherSequence() {
+      const sequenceDiv = document.getElementById('sequence');
+      sequenceDiv.innerHTML = '';
+      entree.forEach(couleur => {
+        const pastille = document.createElement('div');
+        pastille.className = 'pastille ' + couleur;
+        sequenceDiv.appendChild(pastille);
+      });
     }
 
     function valider() {
       const message = document.getElementById('message');
       if (JSON.stringify(entree) === JSON.stringify(bonneSequence)) {
-        message.textContent = 'Bravo, code correct !';
+        message.textContent = 'Félicitations vous avez terminé le journal de bord !';
         message.style.color = 'green';
       } else {
         message.textContent = 'Code incorrect, recommence !';
@@ -71,7 +100,7 @@
 
     function reset() {
       entree = [];
-      document.getElementById('sequence').textContent = '';
+      afficherSequence();
       document.getElementById('message').textContent = '';
     }
   </script>
